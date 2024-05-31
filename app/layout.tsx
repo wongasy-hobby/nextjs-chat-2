@@ -7,6 +7,7 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
+import { ElevenLabsClient, play } from 'elevenlabs';
 
 export const metadata = {
   metadataBase: process.env.VERCEL_URL
@@ -35,7 +36,19 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export async function RootLayout({ children }: RootLayoutProps) {
+  const elevenlabs = new ElevenLabsClient({
+    apiKey: 'YOUR_API_KEY', // Defaults to process.env.ELEVENLABS_API_KEY
+  });
+
+  const audio = await elevenlabs.generate({
+    voice: 'Rachel',
+    text: 'Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!',
+    model_id: 'eleven_multilingual_v2',
+  });
+
+  await play(audio);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
